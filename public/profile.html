@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Profil</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <h2>Tvůj profil</h2>
+    <form id="profileForm" method="POST" action="/update">
+      <input name="name" id="name" placeholder="Jméno" required>
+      <input name="email" id="email" placeholder="Email" required>
+      <button type="submit">Uložit změny</button>
+    </form>
+    <a href="login.html">Odhlásit se</a>
+  </div>
+
+  <script>
+    fetch("/me")
+      .then(res => {
+        if (!res.ok) window.location = "/login.html";
+        return res.json();
+      })
+      .then(data => {
+        document.getElementById("name").value = data.name;
+        document.getElementById("email").value = data.email;
+      });
+  </script>
+</body>
+</html>
