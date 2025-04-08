@@ -8,7 +8,6 @@ const path = require("path");
 const app = express();
 const PORT = 3000;
 
-// Middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "../public")));
 app.use(session({
@@ -17,7 +16,6 @@ app.use(session({
   saveUninitialized: false
 }));
 
-// === REGISTRACE ===
 app.post("/register", async (req, res) => {
   const { username, name, email, password } = req.body;
   if (!username || !name || !email || !password) {
@@ -34,7 +32,6 @@ app.post("/register", async (req, res) => {
     });
 });
 
-// === PŘIHLÁŠENÍ ===
 app.post("/login", (req, res) => {
   const { username, password } = req.body;
   db.get("SELECT * FROM users WHERE username = ?", [username], async (err, user) => {
@@ -46,7 +43,6 @@ app.post("/login", (req, res) => {
   });
 });
 
-// === ZÍSKÁNÍ AKTUÁLNÍHO UŽIVATELE ===
 app.get("/me", (req, res) => {
   if (!req.session.userId) return res.status(401).send("Nepřihlášen.");
   db.get("SELECT id, username, name, email FROM users WHERE id = ?", [req.session.userId], (err, user) => {
@@ -54,7 +50,6 @@ app.get("/me", (req, res) => {
   });
 });
 
-// === ÚPRAVA PROFILU ===
 app.post("/update", (req, res) => {
   if (!req.session.userId) return res.status(401).send("Nepřihlášen.");
   const { name, email } = req.body;
@@ -67,7 +62,6 @@ app.post("/update", (req, res) => {
     });
 });
 
-// === SERVER START ===
 app.listen(PORT, () => {
   console.log(`Server běží na http://localhost:${PORT}`);
 });
